@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>即時 JSON 美化與語法高亮工具</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #f0f2f5;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+      flex-shrink: 0;
+    }
+    .editor-result-container {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      overflow: hidden;
+    }
+    .editor, .result {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    textarea {
+      width: 100%;
+      flex: 1;
+      font-family: Consolas, monospace;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: none;
+      overflow-y: auto;
+    }
+    pre {
+      width: 100%;
+      flex: 1;
+      background-color: #f8f8f8;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 0;
+      display: block;
+    }
+    .button-container {
+      margin-top: 10px;
+      text-align: right;
+      display: block;
+      flex-shrink: 0;
+    }
+    .button-container button {
+      background-color: #007bff;
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .button-container button:hover {
+      background-color: #0056b3;
+    }
+    /* 語法高亮 CSS 樣式 */
+    .string { color: green; }
+    .number { color: darkorange; }
+    .boolean { color: blue; }
+    .null { color: magenta; }
+    .key { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>即時 JSON 美化與語法高亮工具</h1>
+    <div class="editor-result-container">
+      <div class="editor">
+        <textarea id="jsonInput" placeholder="請在此輸入 JSON 格式資料"></textarea>
+        <div id="copyToEditorContainer" class="button-container">
+          <button id="copyToEditor">美化JSON</button>
+        </div>
+      </div>
+      <div class="result">
+        <pre id="jsonOutput"></pre>
+        <div id="copyResultContainer" class="button-container">
+          <button id="copyResult">複製結果</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const jsonInput = document.getElementById('jsonInput');
+    const jsonOutput = document.getElementById('jsonOutput');
+    const copyToEditorBtn = document.getElementById('copyToEditor');
+    const copyResultBtn = document.getElementById('copyResult');
+
+    // 語法高亮函式：將 JSON 的各個部分用 span 包起來，並加入對應 CSS class
+    function syntaxHighlight(json) {
+      if (typeof json !== 'string') {
+        json = JSON.stringify(json, null, 4);
+      }
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(
+        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        function (match) {
+          let cls = 'number';
+          if (/^"/.test(match)) {
+            cls = /:$/.test(match) ? 'key' : 'string';
+          } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+          } else if (/null/.test(match)) {
+            cls = 'null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        }
+      );
+    }
+    
+    // 當使用者在編輯區輸入時，更新右側結果區內容
+    jsonInput.addEventListener('input', () => {
+      const inputText = jsonInput.value.trim();
+      
+      if (inputText === '') {
+        jsonOutput.innerHTML = '';
+        return;
+      }
+      
+      try {
+        const parsedJson = JSON.parse(inputText);
+        const highlightedJson = syntaxHighlight(parsedJson);
+        jsonOutput.innerHTML = highlightedJson;
+      } catch (error) {
+        jsonOutput.innerHTML = '<span style="color: red;">JSON 格式錯誤：' + error.message + '</span>';
+      }
+    });
+    
+    // 按下「美化JSON」按鈕後，將結果區內容解析後格式化，並放回編輯區
+    copyToEditorBtn.addEventListener('click', () => {
+      try {
+        const formatted = JSON.stringify(JSON.parse(jsonOutput.textContent), null, 4);
+        jsonInput.value = formatted;
+        jsonInput.focus();
+      } catch (e) {
+        alert("無法格式化 JSON");
+      }
+    });
+    
+    // 複製結果區內容到剪貼簿
+    copyResultBtn.addEventListener('click', () => {
+      const textToCopy = jsonOutput.textContent;
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+          alert("結果已複製到剪貼簿！");
+        })
+        .catch(err => {
+          alert("複製失敗：" + err);
+        });
+    });
+  </script>
+</body>
+</html>
