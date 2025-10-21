@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>即時 JSON 美化與語法高亮工具</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <title>JSON Formatter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      background-color: #f0f2f5;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       font-family: 'Noto Sans TC', sans-serif;
     }
     body {
@@ -19,22 +19,39 @@
       align-items: center;
     }
     .container {
-      max-width: 1000px;
-      width: 100%;
+      max-width: 1400px;
+      width: 95%;
+      height: 90vh;
+      max-height: 900px;
       background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      padding: 20px;
+      padding: 30px;
       box-sizing: border-box;
+      margin: 20px auto;
+      backdrop-filter: blur(10px);
+      animation: slideUp 0.6s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     h1 {
       text-align: center;
       margin-bottom: 20px;
-      color: #333;
+      color: #2c3e50;
       flex-shrink: 0;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .editor-result-container {
       flex: 1;
@@ -46,30 +63,88 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      position: relative;
+    }
+    
+    .result-header {
+      position: absolute;
+      bottom: 60px;
+      right: 15px;
+      z-index: 10;
+      pointer-events: none;
+    }
+    
+    .scroll-to-top-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background: rgba(102, 126, 234, 0.9);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 20;
+      pointer-events: auto;
+    }
+    
+    .scroll-to-top-btn:hover {
+      background: rgba(102, 126, 234, 1);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+    
+    .scroll-to-top-btn.visible {
+      opacity: 0.9;
+      visibility: visible;
+    }
+    
+    .scroll-to-top-btn.visible:hover {
+      opacity: 1;
     }
     textarea {
       width: 100%;
       flex: 1;
-      font-family: Consolas, monospace;
-      padding: 10px;
+      font-family: 'Fira Code', Consolas, monospace;
+      padding: 15px;
       box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
       resize: none;
       overflow-y: auto;
+      background-color: #f8fafc;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
     pre {
       width: 100%;
       flex: 1;
-      background-color: #f8f8f8;
+      background: linear-gradient(145deg, #f8fafc, #e2e8f0);
       padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      padding-right: 60px;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
       overflow-y: auto;
       white-space: pre-wrap;
       word-wrap: break-word;
       margin: 0;
       display: block;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
     }
     .button-container {
       margin-top: 10px;
@@ -78,29 +153,224 @@
       flex-shrink: 0;
     }
     .button-container button {
-      background-color: #007bff;
+      background: linear-gradient(145deg, #667eea, #764ba2);
       border: none;
       color: #fff;
-      padding: 8px 16px;
+      padding: 12px 24px;
       margin-left: 10px;
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
     .button-container button:hover {
-      background-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    .button-container button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
     }
     /* 語法高亮 CSS 樣式 */
-    .string { color: green; }
-    .number { color: darkorange; }
-    .boolean { color: blue; }
-    .null { color: magenta; }
-    .key { color: red; }
+    .string { color: #16a085; font-weight: 500; }
+    .number { color: #e67e22; font-weight: 600; }
+    .boolean { color: #8e44ad; font-weight: 600; }
+    .null { color: #e74c3c; font-weight: 600; }
+    .key { color: #2980b9; font-weight: 600; }
+    
+    .error-message {
+      color: #e74c3c;
+      background-color: #ffebee;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+        align-items: flex-start;
+      }
+      
+      .container {
+        width: 100%;
+        height: 95vh;
+        min-height: auto;
+        padding: 15px;
+        margin: 0;
+        border-radius: 12px;
+      }
+      
+      h1 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+      
+      .editor-result-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      textarea, pre {
+        height: 250px;
+        font-size: 13px;
+        padding: 12px;
+      }
+      
+      .button-container button {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 15px;
+        margin-left: 0;
+        margin-top: 8px;
+      }
+      
+      .scroll-to-top-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      
+      .result-header {
+        bottom: 50px;
+        right: 10px;
+      }
+      
+      pre {
+        padding-right: 50px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        height: 98vh;
+        padding: 10px;
+        border-radius: 8px;
+      }
+      
+      h1 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+      }
+      
+      textarea, pre {
+        height: 200px;
+        font-size: 12px;
+        padding: 10px;
+      }
+      
+      .button-container button {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+      
+      .scroll-to-top-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+      
+      .result-header {
+        bottom: 45px;
+        right: 8px;
+      }
+      
+      pre {
+        padding-right: 45px;
+      }
+    }
+    
+    @media (min-width: 1400px) {
+      .container {
+        max-width: 1600px;
+        height: 85vh;
+        max-height: 1000px;
+        padding: 40px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+      }
+      
+      textarea, pre {
+        font-size: 15px;
+        padding: 20px;
+      }
+      
+      pre {
+        padding-right: 70px;
+      }
+      
+      .scroll-to-top-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+      }
+      
+      .result-header {
+        bottom: 70px;
+        right: 20px;
+      }
+      
+      .editor-result-container {
+        gap: 30px;
+      }
+    }
+    
+    @media (min-width: 1920px) {
+      .container {
+        max-width: 1800px;
+        height: 80vh;
+        max-height: 1100px;
+        padding: 50px;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 40px;
+      }
+      
+      textarea, pre {
+        font-size: 16px;
+        padding: 25px;
+      }
+      
+      pre {
+        padding-right: 80px;
+      }
+      
+      .scroll-to-top-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+      }
+      
+      .result-header {
+        bottom: 80px;
+        right: 25px;
+      }
+      
+      .editor-result-container {
+        gap: 40px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>即時 JSON 美化與語法高亮工具</h1>
+    <h1>JSON Formatter</h1>
     <div class="editor-result-container">
       <div class="editor">
         <textarea id="jsonInput" placeholder="請在此輸入 JSON 格式資料"></textarea>
@@ -109,6 +379,9 @@
         </div>
       </div>
       <div class="result">
+        <div class="result-header">
+          <button id="scrollToTop" class="scroll-to-top-btn" title="回到頂部">↑</button>
+        </div>
         <pre id="jsonOutput"></pre>
         <div id="copyResultContainer" class="button-container">
           <button id="copyResult">複製結果</button>
@@ -122,6 +395,7 @@
     const jsonOutput = document.getElementById('jsonOutput');
     const copyToEditorBtn = document.getElementById('copyToEditor');
     const copyResultBtn = document.getElementById('copyResult');
+    const scrollToTopBtn = document.getElementById('scrollToTop');
 
     // 語法高亮函式：將 JSON 的各個部分用 span 包起來，並加入對應 CSS class
     function syntaxHighlight(json) {
@@ -151,6 +425,7 @@
       
       if (inputText === '') {
         jsonOutput.innerHTML = '';
+        scrollToTopBtn.classList.remove('visible');
         return;
       }
       
@@ -158,8 +433,24 @@
         const parsedJson = JSON.parse(inputText);
         const highlightedJson = syntaxHighlight(parsedJson);
         jsonOutput.innerHTML = highlightedJson;
+        
+        // 強制滾動到頂部，使用多種方式確保成功
+        setTimeout(() => {
+          jsonOutput.scrollTop = 0;
+          jsonOutput.scrollTo(0, 0);
+        }, 10);
+        
+        // 立即滾動到頂部
+        jsonOutput.scrollTop = 0;
+        
       } catch (error) {
-        jsonOutput.innerHTML = '<span style="color: red;">JSON 格式錯誤：' + error.message + '</span>';
+        jsonOutput.innerHTML = '<div class="error-message">JSON 格式錯誤：' + error.message + '</div>';
+        // 錯誤訊息也滾動到頂部
+        setTimeout(() => {
+          jsonOutput.scrollTop = 0;
+          jsonOutput.scrollTo(0, 0);
+        }, 10);
+        jsonOutput.scrollTop = 0;
       }
     });
     
@@ -169,6 +460,19 @@
         const formatted = JSON.stringify(JSON.parse(jsonOutput.textContent), null, 4);
         jsonInput.value = formatted;
         jsonInput.focus();
+        
+        // 滾動到編輯區頂部
+        setTimeout(() => {
+          jsonInput.scrollTop = 0;
+          jsonInput.scrollTo(0, 0);
+        }, 10);
+        jsonInput.scrollTop = 0;
+        
+        // 觸發 input 事件來更新結果區
+        setTimeout(() => {
+          jsonInput.dispatchEvent(new Event('input'));
+        }, 50);
+        
       } catch (e) {
         alert("無法格式化 JSON");
       }
@@ -184,6 +488,46 @@
         .catch(err => {
           alert("複製失敗：" + err);
         });
+    });
+    
+    // 監聽結果區域的滾動事件，顯示/隱藏回到頂部按鈕
+    jsonOutput.addEventListener('scroll', () => {
+      if (jsonOutput.scrollTop > 50) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
+    });
+    
+    // 監聽結果區域內容變化，確保始終從頂部開始
+    const observer = new MutationObserver(() => {
+      // 當內容改變時，立即滾動到頂部
+      jsonOutput.scrollTop = 0;
+      setTimeout(() => {
+        jsonOutput.scrollTop = 0;
+        jsonOutput.scrollTo(0, 0);
+      }, 10);
+    });
+    
+    observer.observe(jsonOutput, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+    
+    // 回到頂部按鈕點擊事件
+    scrollToTopBtn.addEventListener('click', () => {
+      // 使用多種方式確保滾動成功
+      jsonOutput.scrollTop = 0;
+      jsonOutput.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      
+      // 備用方案
+      setTimeout(() => {
+        jsonOutput.scrollTop = 0;
+      }, 100);
     });
   </script>
 </body>
