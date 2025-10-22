@@ -60,10 +60,13 @@
       overflow: hidden;
     }
     .editor, .result {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
     }
     
     .result-header {
@@ -129,7 +132,6 @@
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
     pre {
-      width: 100%;
       flex: 1;
       background: linear-gradient(145deg, #f8fafc, #e2e8f0);
       padding: 15px;
@@ -139,6 +141,7 @@
       overflow-y: auto;
       white-space: pre-wrap;
       word-wrap: break-word;
+      word-break: break-all;
       margin: 0;
       display: block;
       font-family: 'Fira Code', Consolas, monospace;
@@ -222,10 +225,26 @@
         gap: 15px;
       }
       
-      textarea, pre {
+      .result {
+        min-height: 220px;
+        max-height: 350px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      textarea {
         height: 250px;
         font-size: 13px;
         padding: 12px;
+      }
+      pre {
+        flex: 1;
+        min-height: 180px;
+        max-height: 320px;
+        height: 100%;
+        font-size: 13px;
+        padding: 12px;
+        overflow-y: auto;
       }
       
       .button-container button {
@@ -264,11 +283,36 @@
         margin-bottom: 10px;
       }
       
-      textarea, pre {
+      .result {
+        min-height: 160px;
+        max-height: 250px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      textarea {
         height: 200px;
         font-size: 12px;
         padding: 10px;
       }
+      pre {
+        flex: 1;
+        min-height: 120px;
+        max-height: 220px;
+        height: 100%;
+        font-size: 12px;
+        padding: 10px;
+        overflow-y: auto;
+      }
+    /* 美化滾動條 */
+    pre::-webkit-scrollbar {
+      width: 8px;
+      background: #e1e8ed;
+    }
+    pre::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 4px;
+    }
       
       .button-container button {
         padding: 10px 16px;
