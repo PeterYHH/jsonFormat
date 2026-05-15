@@ -4,574 +4,701 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JSON Formatter</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     html, body {
-      margin: 0;
-      padding: 0;
       height: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      font-family: 'Noto Sans TC', sans-serif;
     }
+
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .container {
-      max-width: 1400px;
-      width: 95%;
-      height: 90vh;
-      max-height: 900px;
-      background-color: #fff;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      background: #f1f5f9;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
       display: flex;
       flex-direction: column;
-      padding: 30px;
-      box-sizing: border-box;
-      margin: 20px auto;
-      backdrop-filter: blur(10px);
-      animation: slideUp 0.6s ease-out;
-    }
-    
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #2c3e50;
-      flex-shrink: 0;
-      font-weight: 700;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .editor-result-container {
-      flex: 1;
-      display: flex;
-      gap: 20px;
+      align-items: center;
+      padding: 20px;
       overflow: hidden;
     }
-    .editor, .result {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-    }
-    
-    .result-header {
-      position: absolute;
-      bottom: 60px;
-      right: 15px;
-      z-index: 10;
-      pointer-events: none;
-    }
-    
-    .scroll-to-top-btn {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      background: rgba(102, 126, 234, 0.9);
-      border: none;
-      border-radius: 50%;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      z-index: 20;
-      pointer-events: auto;
-    }
-    
-    .scroll-to-top-btn:hover {
-      background: rgba(102, 126, 234, 1);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-    }
-    
-    .scroll-to-top-btn.visible {
-      opacity: 0.9;
-      visibility: visible;
-    }
-    
-    .scroll-to-top-btn.visible:hover {
-      opacity: 1;
-    }
-    textarea {
+
+    /* ── App Header ── */
+    .app-header {
       width: 100%;
-      flex: 1;
-      font-family: 'Fira Code', Consolas, monospace;
-      padding: 15px;
-      box-sizing: border-box;
-      border: 2px solid #e1e8ed;
-      border-radius: 12px;
-      resize: none;
-      overflow-y: auto;
-      background-color: #f8fafc;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      font-size: 14px;
-      line-height: 1.6;
+      max-width: 1400px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      flex-shrink: 0;
     }
-    
-    textarea:focus {
+
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-logo {
+      width: 38px;
+      height: 38px;
+      background: #667eea;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: -1px;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
+    }
+
+    .app-brand-text h1 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+      letter-spacing: -0.01em;
+    }
+
+    .app-brand-text p {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 1px;
+    }
+
+    .app-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .indent-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    .indent-control select {
+      border: none;
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      background: transparent;
+      font-size: 0.78rem;
+      color: #334155;
+      cursor: pointer;
+      font-family: 'Fira Code', monospace;
     }
-    pre {
+
+    /* ── Main Container ── */
+    .container {
+      width: 100%;
+      max-width: 1400px;
       flex: 1;
-      background: linear-gradient(145deg, #f8fafc, #e2e8f0);
-      padding: 15px;
-      padding-right: 60px;
-      border: 2px solid #e1e8ed;
-      border-radius: 12px;
+      min-height: 0;
+      background: white;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeUp 0.4s ease-out;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Panels ── */
+    .panels {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+    }
+
+    .panel {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel + .panel {
+      border-left: 1px solid #e2e8f0;
+    }
+
+    /* Panel Header */
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+      flex-shrink: 0;
+    }
+
+    .panel-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+
+    .panel-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Status Badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 100px;
+      letter-spacing: 0.01em;
+      transition: all 0.2s ease;
+    }
+
+    .status-badge.empty   { background: #f1f5f9; color: #cbd5e1; }
+    .status-badge.valid   { background: #ecfdf5; color: #059669; }
+    .status-badge.invalid { background: #fef2f2; color: #dc2626; }
+
+    /* Icon Buttons */
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #94a3b8;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .icon-btn:hover {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    /* Panel Body */
+    .panel-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    textarea {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 13.5px;
+      line-height: 1.75;
+      padding: 16px;
+      border: none;
+      outline: none;
+      resize: none;
+      background: white;
+      color: #1e293b;
       overflow-y: auto;
+    }
+
+    textarea::placeholder { color: #cbd5e1; }
+
+    pre#jsonOutput {
+      flex: 1;
+      min-height: 0;
+      background: #fafafa;
+      padding: 16px;
+      border: none;
+      margin: 0;
       white-space: pre-wrap;
       word-wrap: break-word;
       word-break: break-all;
-      margin: 0;
-      display: block;
       font-family: 'Fira Code', Consolas, monospace;
-      font-size: 14px;
-      line-height: 1.6;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: #374151;
+      overflow-y: auto;
     }
-    .button-container {
-      margin-top: 10px;
-      text-align: right;
-      display: block;
+
+    /* Panel Footer */
+    .panel-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .stats-text {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      font-family: 'Fira Code', monospace;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stats-text.active { color: #94a3b8; }
+
+    .footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       flex-shrink: 0;
     }
-    .button-container button {
-      background: linear-gradient(145deg, #667eea, #764ba2);
-      border: none;
-      color: #fff;
-      padding: 12px 24px;
-      margin-left: 10px;
-      border-radius: 8px;
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 13px;
+      border-radius: 7px;
+      font-size: 0.8rem;
+      font-weight: 500;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.15s;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
     }
-    .button-container button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+
+    .btn-ghost {
+      background: white;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
     }
-    .button-container button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+
+    .btn-ghost:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #334155;
     }
-    /* 語法高亮 CSS 樣式 */
-    .string { color: #16a085; font-weight: 500; }
-    .number { color: #e67e22; font-weight: 600; }
-    .boolean { color: #8e44ad; font-weight: 600; }
-    .null { color: #e74c3c; font-weight: 600; }
-    .key { color: #2980b9; font-weight: 600; }
-    
-    .error-message {
-      color: #e74c3c;
-      background-color: #ffebee;
-      border: 1px solid #ffcdd2;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 10px 0;
-      animation: shake 0.5s ease-in-out;
-    }
-    
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
-    
-    /* 響應式設計 */
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-        align-items: flex-start;
-      }
-      
-      .container {
-        width: 100%;
-        height: 95vh;
-        min-height: auto;
-        padding: 15px;
-        margin: 0;
-        border-radius: 12px;
-      }
-      
-      h1 {
-        font-size: 1.2rem;
-        margin-bottom: 15px;
-      }
-      
-      .editor-result-container {
-        flex-direction: column;
-        gap: 15px;
-      }
-      
-      .result {
-        min-height: 220px;
-        max-height: 350px;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      textarea {
-        height: 250px;
-        font-size: 13px;
-        padding: 12px;
-      }
-      pre {
-        flex: 1;
-        min-height: 180px;
-        max-height: 320px;
-        height: 100%;
-        font-size: 13px;
-        padding: 12px;
-        overflow-y: auto;
-      }
-      
-      .button-container button {
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 15px;
-        margin-left: 0;
-        margin-top: 8px;
-      }
-      
-      .scroll-to-top-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
-      }
-      
-      .result-header {
-        bottom: 50px;
-        right: 10px;
-      }
-      
-      pre {
-        padding-right: 50px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .container {
-        height: 98vh;
-        padding: 10px;
-        border-radius: 8px;
-      }
-      
-      h1 {
-        font-size: 1.1rem;
-        margin-bottom: 10px;
-      }
-      
-      .result {
-        min-height: 160px;
-        max-height: 250px;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      textarea {
-        height: 200px;
-        font-size: 12px;
-        padding: 10px;
-      }
-      pre {
-        flex: 1;
-        min-height: 120px;
-        max-height: 220px;
-        height: 100%;
-        font-size: 12px;
-        padding: 10px;
-        overflow-y: auto;
-      }
-    /* 美化滾動條 */
-    pre::-webkit-scrollbar {
-      width: 8px;
-      background: #e1e8ed;
-    }
-    pre::-webkit-scrollbar-thumb {
+
+    .btn-primary {
       background: #667eea;
-      border-radius: 4px;
+      color: white;
+      box-shadow: 0 1px 6px rgba(102, 126, 234, 0.3);
     }
-      
-      .button-container button {
-        padding: 10px 16px;
-        font-size: 14px;
-      }
-      
-      .scroll-to-top-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 14px;
-      }
-      
-      .result-header {
-        bottom: 45px;
-        right: 8px;
-      }
-      
-      pre {
-        padding-right: 45px;
-      }
+
+    .btn-primary:hover {
+      background: #5a70d8;
+      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+      transform: translateY(-1px);
     }
-    
-    @media (min-width: 1400px) {
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 4px rgba(102, 126, 234, 0.3);
+    }
+
+    .kbd {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.68rem;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      padding: 1px 4px;
+      opacity: 0.85;
+    }
+
+    /* Syntax highlighting */
+    .string  { color: #059669; }
+    .number  { color: #d97706; font-weight: 500; }
+    .boolean { color: #7c3aed; font-weight: 500; }
+    .null    { color: #dc2626; font-weight: 500; }
+    .key     { color: #2563eb; font-weight: 500; }
+
+    /* Error message */
+    .error-msg {
+      display: flex;
+      gap: 8px;
+      color: #b91c1c;
+      background: #fef2f2;
+      border-left: 3px solid #f87171;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      font-family: 'Fira Code', monospace;
+      line-height: 1.6;
+    }
+
+    /* Scroll to top */
+    .scroll-top-btn {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      width: 30px;
+      height: 30px;
+      background: #667eea;
+      border: none;
+      border-radius: 7px;
+      color: white;
+      font-size: 13px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .scroll-top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top-btn:hover {
+      background: #5a70d8;
+      transform: translateY(-2px);
+    }
+
+    /* Scrollbars */
+    pre::-webkit-scrollbar,
+    textarea::-webkit-scrollbar { width: 5px; }
+    pre::-webkit-scrollbar-track,
+    textarea::-webkit-scrollbar-track { background: transparent; }
+    pre::-webkit-scrollbar-thumb,
+    textarea::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 3px;
+    }
+    pre::-webkit-scrollbar-thumb:hover,
+    textarea::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: #1e293b;
+      color: #f1f5f9;
+      padding: 9px 15px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      animation: toastIn 0.2s ease-out, toastOut 0.2s ease-in 1.8s forwards;
+    }
+
+    .toast::before {
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .toast.success::before { content: '✓'; color: #34d399; }
+    .toast.error::before   { content: '✕'; color: #f87171; }
+    .toast.info::before    { content: 'i'; color: #60a5fa; font-style: italic; }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-6px); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      body { padding: 0; overflow: auto; height: auto; }
+
+      .app-header {
+        padding: 12px 14px 10px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #f1f5f9;
+      }
+
+      .app-brand-text p { display: none; }
+      .indent-control label { display: none; }
+
       .container {
-        max-width: 1600px;
-        height: 85vh;
-        max-height: 1000px;
-        padding: 40px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        box-shadow: none;
+        min-height: auto;
       }
-      
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 30px;
-      }
-      
-      textarea, pre {
-        font-size: 15px;
-        padding: 20px;
-      }
-      
-      pre {
-        padding-right: 70px;
-      }
-      
-      .scroll-to-top-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-      }
-      
-      .result-header {
-        bottom: 70px;
-        right: 20px;
-      }
-      
-      .editor-result-container {
-        gap: 30px;
-      }
-    }
-    
-    @media (min-width: 1920px) {
-      .container {
-        max-width: 1800px;
-        height: 80vh;
-        max-height: 1100px;
-        padding: 50px;
-      }
-      
-      h1 {
-        font-size: 2.2rem;
-        margin-bottom: 40px;
-      }
-      
-      textarea, pre {
-        font-size: 16px;
-        padding: 25px;
-      }
-      
-      pre {
-        padding-right: 80px;
-      }
-      
-      .scroll-to-top-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 22px;
-      }
-      
-      .result-header {
-        bottom: 80px;
-        right: 25px;
-      }
-      
-      .editor-result-container {
-        gap: 40px;
-      }
+
+      .panels { flex-direction: column; }
+      .panel + .panel { border-left: none; border-top: 1px solid #e2e8f0; }
+      .panel { min-height: 45vh; }
+
+      textarea { font-size: 13px; }
+      pre#jsonOutput { font-size: 13px; background: white; }
+
+      .btn-ghost .btn-label { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>JSON Formatter</h1>
-    <div class="editor-result-container">
-      <div class="editor">
-        <textarea id="jsonInput" placeholder="請在此輸入 JSON 格式資料"></textarea>
-        <div id="copyToEditorContainer" class="button-container">
-          <button id="copyToEditor">美化JSON</button>
-        </div>
-      </div>
-      <div class="result">
-        <div class="result-header">
-          <button id="scrollToTop" class="scroll-to-top-btn" title="回到頂部">↑</button>
-        </div>
-        <pre id="jsonOutput"></pre>
-        <div id="copyResultContainer" class="button-container">
-          <button id="copyResult">複製結果</button>
-        </div>
+
+  <header class="app-header">
+    <div class="app-brand">
+      <div class="app-logo">{ }</div>
+      <div class="app-brand-text">
+        <h1>JSON Formatter</h1>
+        <p>即時格式化與驗證工具</p>
       </div>
     </div>
-  </div>
-  
-  <script>
-    const jsonInput = document.getElementById('jsonInput');
-    const jsonOutput = document.getElementById('jsonOutput');
-    const copyToEditorBtn = document.getElementById('copyToEditor');
-    const copyResultBtn = document.getElementById('copyResult');
-    const scrollToTopBtn = document.getElementById('scrollToTop');
+    <div class="app-controls">
+      <div class="indent-control">
+        <label for="indentSize">縮排</label>
+        <select id="indentSize">
+          <option value="2">2 spaces</option>
+          <option value="4" selected>4 spaces</option>
+          <option value="tab">tab</option>
+        </select>
+      </div>
+    </div>
+  </header>
 
-    // 語法高亮函式：將 JSON 的各個部分用 span 包起來，並加入對應 CSS class
+  <div class="container">
+    <div class="panels">
+
+      <!-- Input Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">輸入</span>
+          <div class="panel-actions">
+            <span id="inputStatus" class="status-badge empty">待輸入</span>
+            <button class="icon-btn" id="clearBtn" title="清除 (Esc)">✕</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <textarea id="jsonInput" placeholder='{"name": "Peter", "tags": ["json", "formatter"]}'></textarea>
+        </div>
+        <div class="panel-footer">
+          <span id="inputStats" class="stats-text"></span>
+          <div class="footer-actions">
+            <button class="btn btn-ghost" id="minifyBtn">
+              <span class="btn-label">壓縮</span>
+            </button>
+            <button class="btn btn-primary" id="formatBtn">
+              格式化
+              <span class="kbd">⌘↵</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Output Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">結果</span>
+          <div class="panel-actions">
+            <button class="btn btn-ghost" id="copyBtn" style="padding: 4px 10px; font-size: 0.75rem;">複製</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <pre id="jsonOutput"></pre>
+          <button id="scrollToTop" class="scroll-top-btn" title="回到頂部">↑</button>
+        </div>
+        <div class="panel-footer">
+          <span id="outputStats" class="stats-text"></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const jsonInput    = document.getElementById('jsonInput');
+    const jsonOutput   = document.getElementById('jsonOutput');
+    const formatBtn    = document.getElementById('formatBtn');
+    const minifyBtn    = document.getElementById('minifyBtn');
+    const clearBtn     = document.getElementById('clearBtn');
+    const copyBtn      = document.getElementById('copyBtn');
+    const scrollTopBtn = document.getElementById('scrollToTop');
+    const inputStatus  = document.getElementById('inputStatus');
+    const inputStats   = document.getElementById('inputStats');
+    const outputStats  = document.getElementById('outputStats');
+    const indentSize   = document.getElementById('indentSize');
+    const toastEl      = document.getElementById('toastContainer');
+
+    function getIndent() {
+      const v = indentSize.value;
+      return v === 'tab' ? '\t' : parseInt(v);
+    }
+
+    function toast(message, type = 'success') {
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.textContent = message;
+      toastEl.appendChild(el);
+      setTimeout(() => el.remove(), 2100);
+    }
+
     function syntaxHighlight(json) {
-      if (typeof json !== 'string') {
-        json = JSON.stringify(json, null, 4);
-      }
+      if (typeof json !== 'string') json = JSON.stringify(json, null, getIndent());
       json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       return json.replace(
-        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-        function (match) {
+        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        match => {
           let cls = 'number';
-          if (/^"/.test(match)) {
-            cls = /:$/.test(match) ? 'key' : 'string';
-          } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-          } else if (/null/.test(match)) {
-            cls = 'null';
-          }
-          return '<span class="' + cls + '">' + match + '</span>';
+          if (/^"/.test(match)) cls = /:$/.test(match) ? 'key' : 'string';
+          else if (/true|false/.test(match)) cls = 'boolean';
+          else if (/null/.test(match)) cls = 'null';
+          return `<span class="${cls}">${match}</span>`;
         }
       );
     }
-    
-    // 當使用者在編輯區輸入時，更新右側結果區內容
-    jsonInput.addEventListener('input', () => {
-      const inputText = jsonInput.value.trim();
-      
-      if (inputText === '') {
+
+    function getJsonStats(obj) {
+      let keys = 0, maxDepth = 0;
+      function walk(o, d) {
+        maxDepth = Math.max(maxDepth, d);
+        if (Array.isArray(o)) {
+          o.forEach(item => walk(item, d + 1));
+        } else if (o !== null && typeof o === 'object') {
+          Object.keys(o).forEach(k => { keys++; walk(o[k], d + 1); });
+        }
+      }
+      walk(obj, 0);
+      return { keys, maxDepth };
+    }
+
+    function setStatus(type, label) {
+      inputStatus.className = `status-badge ${type}`;
+      inputStatus.textContent = label;
+    }
+
+    function renderOutput(parsed) {
+      jsonOutput.innerHTML = syntaxHighlight(parsed);
+      jsonOutput.scrollTop = 0;
+      const stats = getJsonStats(parsed);
+      const lines = jsonOutput.textContent.split('\n').length;
+      outputStats.textContent = `${stats.keys} 個欄位・深度 ${stats.maxDepth}・${lines} 行`;
+      outputStats.classList.add('active');
+    }
+
+    function updateInput() {
+      const text = jsonInput.value.trim();
+      if (!text) {
+        setStatus('empty', '待輸入');
+        inputStats.textContent = '';
+        inputStats.classList.remove('active');
         jsonOutput.innerHTML = '';
-        scrollToTopBtn.classList.remove('visible');
+        outputStats.textContent = '';
+        outputStats.classList.remove('active');
         return;
       }
-      
       try {
-        const parsedJson = JSON.parse(inputText);
-        const highlightedJson = syntaxHighlight(parsedJson);
-        jsonOutput.innerHTML = highlightedJson;
-        
-        // 強制滾動到頂部，使用多種方式確保成功
-        setTimeout(() => {
-          jsonOutput.scrollTop = 0;
-          jsonOutput.scrollTo(0, 0);
-        }, 10);
-        
-        // 立即滾動到頂部
-        jsonOutput.scrollTop = 0;
-        
-      } catch (error) {
-        jsonOutput.innerHTML = '<div class="error-message">JSON 格式錯誤：' + error.message + '</div>';
-        // 錯誤訊息也滾動到頂部
-        setTimeout(() => {
-          jsonOutput.scrollTop = 0;
-          jsonOutput.scrollTo(0, 0);
-        }, 10);
-        jsonOutput.scrollTop = 0;
-      }
-    });
-    
-    // 按下「美化JSON」按鈕後，將結果區內容解析後格式化，並放回編輯區
-    copyToEditorBtn.addEventListener('click', () => {
-      try {
-        const formatted = JSON.stringify(JSON.parse(jsonOutput.textContent), null, 4);
-        jsonInput.value = formatted;
-        jsonInput.focus();
-        
-        // 滾動到編輯區頂部
-        setTimeout(() => {
-          jsonInput.scrollTop = 0;
-          jsonInput.scrollTo(0, 0);
-        }, 10);
-        jsonInput.scrollTop = 0;
-        
-        // 觸發 input 事件來更新結果區
-        setTimeout(() => {
-          jsonInput.dispatchEvent(new Event('input'));
-        }, 50);
-        
+        const parsed = JSON.parse(text);
+        setStatus('valid', '✓ 有效');
+        inputStats.textContent = `${text.length.toLocaleString()} 字元`;
+        inputStats.classList.add('active');
+        renderOutput(parsed);
       } catch (e) {
-        alert("無法格式化 JSON");
+        setStatus('invalid', '✕ 格式錯誤');
+        inputStats.textContent = '';
+        inputStats.classList.remove('active');
+        jsonOutput.innerHTML = `<div class="error-msg">${e.message}</div>`;
+        outputStats.textContent = '';
+        outputStats.classList.remove('active');
+      }
+    }
+
+    jsonInput.addEventListener('input', updateInput);
+
+    indentSize.addEventListener('change', () => {
+      const text = jsonInput.value.trim();
+      if (!text) return;
+      try { renderOutput(JSON.parse(text)); } catch(e) {}
+    });
+
+    formatBtn.addEventListener('click', () => {
+      const text = jsonInput.value.trim();
+      if (!text) return;
+      try {
+        jsonInput.value = JSON.stringify(JSON.parse(text), null, getIndent());
+        jsonInput.scrollTop = 0;
+        updateInput();
+        toast('格式化完成');
+      } catch(e) {
+        toast('JSON 格式錯誤，無法格式化', 'error');
       }
     });
-    
-    // 複製結果區內容到剪貼簿
-    copyResultBtn.addEventListener('click', () => {
-      const textToCopy = jsonOutput.textContent;
-      navigator.clipboard.writeText(textToCopy)
-        .then(() => {
-          alert("結果已複製到剪貼簿！");
-        })
-        .catch(err => {
-          alert("複製失敗：" + err);
-        });
+
+    minifyBtn.addEventListener('click', () => {
+      const text = jsonInput.value.trim();
+      if (!text) return;
+      try {
+        jsonInput.value = JSON.stringify(JSON.parse(text));
+        updateInput();
+        toast('已壓縮為單行');
+      } catch(e) {
+        toast('JSON 格式錯誤，無法壓縮', 'error');
+      }
     });
-    
-    // 監聽結果區域的滾動事件，顯示/隱藏回到頂部按鈕
+
+    clearBtn.addEventListener('click', () => {
+      jsonInput.value = '';
+      updateInput();
+      jsonInput.focus();
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const text = jsonOutput.textContent;
+      if (!text.trim()) { toast('沒有內容可複製', 'info'); return; }
+      navigator.clipboard.writeText(text)
+        .then(() => toast('已複製到剪貼簿'))
+        .catch(() => toast('複製失敗', 'error'));
+    });
+
     jsonOutput.addEventListener('scroll', () => {
-      if (jsonOutput.scrollTop > 50) {
-        scrollToTopBtn.classList.add('visible');
-      } else {
-        scrollToTopBtn.classList.remove('visible');
-      }
+      scrollTopBtn.classList.toggle('visible', jsonOutput.scrollTop > 80);
     });
-    
-    // 監聽結果區域內容變化，確保始終從頂部開始
-    const observer = new MutationObserver(() => {
-      // 當內容改變時，立即滾動到頂部
-      jsonOutput.scrollTop = 0;
-      setTimeout(() => {
-        jsonOutput.scrollTop = 0;
-        jsonOutput.scrollTo(0, 0);
-      }, 10);
+
+    scrollTopBtn.addEventListener('click', () => {
+      jsonOutput.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    
-    observer.observe(jsonOutput, {
-      childList: true,
-      subtree: true,
-      characterData: true
-    });
-    
-    // 回到頂部按鈕點擊事件
-    scrollToTopBtn.addEventListener('click', () => {
-      // 使用多種方式確保滾動成功
-      jsonOutput.scrollTop = 0;
-      jsonOutput.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-      
-      // 備用方案
-      setTimeout(() => {
-        jsonOutput.scrollTop = 0;
-      }, 100);
+
+    document.addEventListener('keydown', e => {
+      const mod = navigator.platform.toUpperCase().includes('MAC') ? e.metaKey : e.ctrlKey;
+      if (mod && e.key === 'Enter') { e.preventDefault(); formatBtn.click(); }
+      if (e.key === 'Escape' && document.activeElement === jsonInput) clearBtn.click();
     });
   </script>
 </body>
