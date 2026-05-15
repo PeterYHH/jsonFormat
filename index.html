@@ -435,6 +435,63 @@
       to   { opacity: 0; transform: translateY(-6px); }
     }
 
+    /* Drop overlay */
+    .drop-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(102, 126, 234, 0.05);
+      border: 2px dashed #667eea;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+      z-index: 10;
+    }
+
+    .drop-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drop-overlay-icon {
+      font-size: 30px;
+      line-height: 1;
+      color: #667eea;
+    }
+
+    .drop-overlay-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .drop-overlay-sub {
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
+    /* Upload hint */
+    .upload-hint {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      font-family: 'Fira Code', monospace;
+      user-select: none;
+    }
+
+    .upload-hint span {
+      color: #667eea;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .upload-hint:hover span { color: #5a70d8; }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       body { padding: 0; overflow: auto; height: auto; }
@@ -504,11 +561,20 @@
             <button class="icon-btn" id="clearBtn" title="清除 (Esc)">✕</button>
           </div>
         </div>
-        <div class="panel-body">
+        <div class="panel-body" id="dropZone">
+          <div class="drop-overlay" id="dropOverlay">
+            <div class="drop-overlay-icon">↓</div>
+            <div class="drop-overlay-label">放開以載入 JSON 檔案</div>
+            <div class="drop-overlay-sub">僅支援 .json 格式</div>
+          </div>
           <textarea id="jsonInput" placeholder='{"name": "Peter", "tags": ["json", "formatter"]}'></textarea>
         </div>
         <div class="panel-footer">
-          <span id="inputStats" class="stats-text"></span>
+          <div class="footer-left">
+            <span id="inputStats" class="stats-text" style="display:none"></span>
+            <label for="fileInput" id="uploadHint" class="upload-hint">拖曳或 <span>選擇</span> .json 檔案</label>
+            <input type="file" id="fileInput" accept=".json,application/json" style="display:none">
+          </div>
           <div class="footer-actions">
             <button class="btn btn-ghost" id="minifyBtn">
               <span class="btn-label">壓縮</span>
@@ -520,6 +586,7 @@
           </div>
         </div>
       </div>
+
 
       <!-- Output Panel -->
       <div class="panel">
@@ -556,6 +623,10 @@
     const outputStats  = document.getElementById('outputStats');
     const indentSize   = document.getElementById('indentSize');
     const toastEl      = document.getElementById('toastContainer');
+    const dropZone     = document.getElementById('dropZone');
+    const dropOverlay  = document.getElementById('dropOverlay');
+    const fileInput    = document.getElementById('fileInput');
+    const uploadHint   = document.getElementById('uploadHint');
 
     function getIndent() {
       const v = indentSize.value;
@@ -613,6 +684,11 @@
       outputStats.classList.add('active');
     }
 
+    function showUploadHint(show) {
+      uploadHint.style.display  = show ? '' : 'none';
+      inputStats.style.display  = show ? 'none' : '';
+    }
+
     function updateInput() {
       const text = jsonInput.value.trim();
       if (!text) {
@@ -622,8 +698,10 @@
         jsonOutput.innerHTML = '';
         outputStats.textContent = '';
         outputStats.classList.remove('active');
+        showUploadHint(true);
         return;
       }
+      showUploadHint(false);
       try {
         const parsed = JSON.parse(text);
         setStatus('valid', '✓ 有效');
@@ -694,6 +772,57 @@
     scrollTopBtn.addEventListener('click', () => {
       jsonOutput.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // ── 拖曳上傳 ──
+    function loadJsonFile(file) {
+      if (!file) return;
+      if (!file.name.endsWith('.json') && file.type !== 'application/json') {
+        toast('請選擇 .json 格式的檔案', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = e => {
+        jsonInput.value = e.target.result;
+        updateInput();
+        toast(`已載入 ${file.name}`);
+      };
+      reader.onerror = () => toast('檔案讀取失敗', 'error');
+      reader.readAsText(file, 'utf-8');
+    }
+
+    fileInput.addEventListener('change', e => {
+      if (e.target.files[0]) loadJsonFile(e.target.files[0]);
+      fileInput.value = '';
+    });
+
+    let dragCounter = 0;
+
+    dropZone.addEventListener('dragenter', e => {
+      e.preventDefault();
+      dragCounter++;
+      if (dragCounter === 1) dropOverlay.classList.add('active');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dragCounter--;
+      if (dragCounter === 0) dropOverlay.classList.remove('active');
+    });
+
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    });
+
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dragCounter = 0;
+      dropOverlay.classList.remove('active');
+      loadJsonFile(e.dataTransfer.files[0]);
+    });
+
+    // 防止瀏覽器直接開啟拖進來的檔案
+    document.addEventListener('dragover', e => e.preventDefault());
+    document.addEventListener('drop', e => e.preventDefault());
 
     document.addEventListener('keydown', e => {
       const mod = navigator.platform.toUpperCase().includes('MAC') ? e.metaKey : e.ctrlKey;
