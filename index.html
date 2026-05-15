@@ -8,9 +8,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html, body {
-      height: 100%;
-    }
+    html, body { height: 100%; }
 
     body {
       background: #f1f5f9;
@@ -33,81 +31,45 @@
       flex-shrink: 0;
     }
 
-    .app-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .app-brand { display: flex; align-items: center; gap: 10px; }
 
     .app-logo {
-      width: 38px;
-      height: 38px;
+      width: 38px; height: 38px;
       background: #667eea;
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-family: 'Fira Code', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      color: white;
-      letter-spacing: -1px;
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
+      font-size: 13px; font-weight: 600;
+      color: white; letter-spacing: -1px;
+      box-shadow: 0 2px 8px rgba(102,126,234,0.35);
     }
 
-    .app-brand-text h1 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #1e293b;
-      letter-spacing: -0.01em;
-    }
+    .app-brand-text h1 { font-size: 1rem; font-weight: 700; color: #1e293b; letter-spacing: -0.01em; }
+    .app-brand-text p  { font-size: 0.75rem; color: #94a3b8; margin-top: 1px; }
 
-    .app-brand-text p {
-      font-size: 0.75rem;
-      color: #94a3b8;
-      margin-top: 1px;
-    }
-
-    .app-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .app-controls { display: flex; align-items: center; gap: 8px; }
 
     .indent-control {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 0.78rem;
-      color: #64748b;
+      display: flex; align-items: center; gap: 6px;
+      background: white; border: 1px solid #e2e8f0;
+      border-radius: 8px; padding: 6px 10px;
+      font-size: 0.78rem; color: #64748b;
     }
 
     .indent-control select {
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: 0.78rem;
-      color: #334155;
-      cursor: pointer;
+      border: none; outline: none; background: transparent;
+      font-size: 0.78rem; color: #334155; cursor: pointer;
       font-family: 'Fira Code', monospace;
     }
 
     /* ── Main Container ── */
     .container {
-      width: 100%;
-      max-width: 1400px;
-      flex: 1;
-      min-height: 0;
+      width: 100%; max-width: 1400px;
+      flex: 1; min-height: 0;
       background: white;
-      border-radius: 14px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
-      display: flex;
-      flex-direction: column;
+      border-radius: 14px; border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+      display: flex; flex-direction: column;
       overflow: hidden;
       animation: fadeUp 0.4s ease-out;
     }
@@ -118,411 +80,285 @@
     }
 
     /* ── Panels ── */
-    .panels {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-    }
+    .panels { flex: 1; min-height: 0; display: flex; }
 
-    .panel {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .panel + .panel {
-      border-left: 1px solid #e2e8f0;
-    }
+    .panel { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .panel + .panel { border-left: 1px solid #e2e8f0; }
 
     /* Panel Header */
     .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 10px 14px;
       border-bottom: 1px solid #e2e8f0;
-      background: #f8fafc;
-      flex-shrink: 0;
+      background: #f8fafc; flex-shrink: 0;
     }
 
     .panel-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: #94a3b8;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.07em; text-transform: uppercase; color: #94a3b8;
     }
 
-    .panel-actions {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+    .panel-actions { display: flex; align-items: center; gap: 5px; }
 
     /* Status Badge */
     .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 100px;
-      letter-spacing: 0.01em;
-      transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.72rem; font-weight: 600;
+      padding: 3px 8px; border-radius: 100px;
+      letter-spacing: 0.01em; transition: all 0.2s ease;
     }
-
     .status-badge.empty   { background: #f1f5f9; color: #cbd5e1; }
     .status-badge.valid   { background: #ecfdf5; color: #059669; }
     .status-badge.invalid { background: #fef2f2; color: #dc2626; }
 
     /* Icon Buttons */
     .icon-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: transparent;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #94a3b8;
-      font-size: 13px;
-      transition: all 0.15s;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px;
+      border: none; background: transparent;
+      border-radius: 6px; cursor: pointer;
+      color: #94a3b8; font-size: 13px; transition: all 0.15s;
     }
-
-    .icon-btn:hover {
-      background: #f1f5f9;
-      color: #475569;
-    }
+    .icon-btn:hover { background: #f1f5f9; color: #475569; }
+    .icon-btn.active { background: #ede9fe; color: #667eea; }
 
     /* Panel Body */
     .panel-body {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
+      flex: 1; min-height: 0;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
     }
 
     textarea {
-      flex: 1;
-      min-height: 0;
-      width: 100%;
+      flex: 1; min-height: 0; width: 100%;
       font-family: 'Fira Code', Consolas, monospace;
-      font-size: 13.5px;
-      line-height: 1.75;
-      padding: 16px;
-      border: none;
-      outline: none;
-      resize: none;
-      background: white;
-      color: #1e293b;
-      overflow-y: auto;
+      font-size: 13.5px; line-height: 1.75;
+      padding: 16px; border: none; outline: none; resize: none;
+      background: white; color: #1e293b; overflow-y: auto;
     }
-
     textarea::placeholder { color: #cbd5e1; }
 
     pre#jsonOutput {
-      flex: 1;
-      min-height: 0;
-      background: #fafafa;
-      padding: 16px;
-      border: none;
-      margin: 0;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      word-break: break-all;
+      flex: 1; min-height: 0;
+      background: #fafafa; padding: 16px;
+      border: none; margin: 0;
+      white-space: pre-wrap; word-wrap: break-word; word-break: break-all;
       font-family: 'Fira Code', Consolas, monospace;
-      font-size: 13.5px;
-      line-height: 1.75;
-      color: #374151;
+      font-size: 13.5px; line-height: 1.75; color: #374151;
       overflow-y: auto;
     }
 
     /* Panel Footer */
     .panel-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 9px 14px;
       border-top: 1px solid #e2e8f0;
-      background: #f8fafc;
-      flex-shrink: 0;
-      gap: 8px;
+      background: #f8fafc; flex-shrink: 0; gap: 8px;
     }
+
+    .footer-left { display: flex; align-items: center; min-width: 0; }
 
     .stats-text {
-      font-size: 0.72rem;
-      color: #cbd5e1;
+      font-size: 0.72rem; color: #cbd5e1;
       font-family: 'Fira Code', monospace;
-      min-width: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-
     .stats-text.active { color: #94a3b8; }
 
-    .footer-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
+    .footer-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
     /* Buttons */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 6px 13px;
-      border-radius: 7px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      border: none;
-      font-family: 'Inter', sans-serif;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 13px; border-radius: 7px;
+      font-size: 0.8rem; font-weight: 500; cursor: pointer;
+      transition: all 0.15s; border: none;
+      font-family: 'Inter', sans-serif; white-space: nowrap;
     }
-
     .btn-ghost {
-      background: white;
-      color: #64748b;
-      border: 1px solid #e2e8f0;
+      background: white; color: #64748b; border: 1px solid #e2e8f0;
     }
-
-    .btn-ghost:hover {
-      background: #f8fafc;
-      border-color: #cbd5e1;
-      color: #334155;
-    }
-
+    .btn-ghost:hover { background: #f8fafc; border-color: #cbd5e1; color: #334155; }
     .btn-primary {
-      background: #667eea;
-      color: white;
-      box-shadow: 0 1px 6px rgba(102, 126, 234, 0.3);
+      background: #667eea; color: white;
+      box-shadow: 0 1px 6px rgba(102,126,234,0.3);
     }
-
     .btn-primary:hover {
       background: #5a70d8;
-      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 3px 10px rgba(102,126,234,0.4);
       transform: translateY(-1px);
     }
-
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: 0 1px 4px rgba(102, 126, 234, 0.3);
-    }
+    .btn-primary:active { transform: translateY(0); box-shadow: 0 1px 4px rgba(102,126,234,0.3); }
 
     .kbd {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.68rem;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
-      padding: 1px 4px;
-      opacity: 0.85;
+      font-family: 'Fira Code', monospace; font-size: 0.68rem;
+      background: rgba(255,255,255,0.2); border-radius: 3px; padding: 1px 4px; opacity: 0.85;
     }
 
-    /* Syntax highlighting */
+    /* ── Syntax highlighting ── */
     .string  { color: #059669; }
     .number  { color: #d97706; font-weight: 500; }
     .boolean { color: #7c3aed; font-weight: 500; }
     .null    { color: #dc2626; font-weight: 500; }
     .key     { color: #2563eb; font-weight: 500; }
 
-    /* Error message */
-    .error-msg {
-      display: flex;
-      gap: 8px;
-      color: #b91c1c;
-      background: #fef2f2;
-      border-left: 3px solid #f87171;
-      padding: 12px 16px;
-      font-size: 0.82rem;
-      font-family: 'Fira Code', monospace;
-      line-height: 1.6;
-    }
-
-    /* Scroll to top */
-    .scroll-top-btn {
-      position: absolute;
-      bottom: 14px;
-      right: 14px;
-      width: 30px;
-      height: 30px;
-      background: #667eea;
-      border: none;
-      border-radius: 7px;
-      color: white;
-      font-size: 13px;
+    /* ── Collapsible tree ── */
+    .ctoggle {
+      display: inline-block;
+      width: 13px;
       cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+      color: #94a3b8;
+      font-size: 0.52rem;
+      user-select: none;
+      margin-right: 1px;
+      vertical-align: baseline;
+      transition: color 0.1s;
     }
+    .ctoggle:hover { color: #667eea; }
 
-    .scroll-top-btn.visible {
-      opacity: 1;
-      visibility: visible;
-    }
+    .cnode > .csummary { display: none; color: #94a3b8; }
+    .cnode.collapsed > .cbody { display: none; }
+    .cnode.collapsed > .csummary { display: inline; }
 
-    .scroll-top-btn:hover {
-      background: #5a70d8;
-      transform: translateY(-2px);
-    }
-
-    /* Scrollbars */
-    pre::-webkit-scrollbar,
-    textarea::-webkit-scrollbar { width: 5px; }
-    pre::-webkit-scrollbar-track,
-    textarea::-webkit-scrollbar-track { background: transparent; }
-    pre::-webkit-scrollbar-thumb,
-    textarea::-webkit-scrollbar-thumb {
-      background: #e2e8f0;
+    .csummary-pill {
+      font-size: 0.78em;
+      background: #f1f5f9;
       border-radius: 3px;
+      padding: 0 4px;
+      color: #94a3b8;
     }
-    pre::-webkit-scrollbar-thumb:hover,
-    textarea::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
 
-    /* Toast */
+    /* ── Search bar ── */
+    .search-bar {
+      display: none;
+      align-items: center; gap: 6px;
+      padding: 8px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc; flex-shrink: 0;
+    }
+    .search-bar.visible { display: flex; }
+
+    .search-input {
+      flex: 1; padding: 5px 10px;
+      border: 1px solid #e2e8f0; border-radius: 6px;
+      font-size: 0.8rem; font-family: 'Fira Code', monospace;
+      outline: none; background: white; color: #1e293b;
+      transition: border-color 0.15s;
+    }
+    .search-input:focus { border-color: #667eea; }
+
+    .search-count {
+      font-size: 0.72rem; color: #94a3b8;
+      font-family: 'Fira Code', monospace;
+      white-space: nowrap; min-width: 48px; text-align: center;
+    }
+
+    .search-nav {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px;
+      border: 1px solid #e2e8f0; background: white;
+      border-radius: 5px; cursor: pointer;
+      color: #64748b; font-size: 12px; transition: all 0.15s;
+    }
+    .search-nav:hover:not(:disabled) { background: #f1f5f9; border-color: #cbd5e1; }
+    .search-nav:disabled { opacity: 0.35; cursor: default; }
+
+    mark.sh {
+      background: #fef08a; color: inherit;
+      border-radius: 2px; padding: 0 1px;
+    }
+    mark.sh.current { background: #f97316; color: white; }
+
+    /* ── Error message ── */
+    .error-msg {
+      display: flex; gap: 8px;
+      color: #b91c1c; background: #fef2f2;
+      border-left: 3px solid #f87171;
+      padding: 12px 16px; font-size: 0.82rem;
+      font-family: 'Fira Code', monospace; line-height: 1.6;
+    }
+
+    /* ── Scroll to top ── */
+    .scroll-top-btn {
+      position: absolute; bottom: 14px; right: 14px;
+      width: 30px; height: 30px;
+      background: #667eea; border: none; border-radius: 7px;
+      color: white; font-size: 13px; cursor: pointer;
+      opacity: 0; visibility: hidden;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(102,126,234,0.3);
+    }
+    .scroll-top-btn.visible { opacity: 1; visibility: visible; }
+    .scroll-top-btn:hover { background: #5a70d8; transform: translateY(-2px); }
+
+    /* ── Scrollbars ── */
+    pre::-webkit-scrollbar, textarea::-webkit-scrollbar { width: 5px; }
+    pre::-webkit-scrollbar-track, textarea::-webkit-scrollbar-track { background: transparent; }
+    pre::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+    pre::-webkit-scrollbar-thumb:hover, textarea::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+    /* ── Toast ── */
     .toast-container {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      pointer-events: none;
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 1000; display: flex; flex-direction: column; align-items: center;
+      gap: 8px; pointer-events: none;
     }
-
     .toast {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: #1e293b;
-      color: #f1f5f9;
-      padding: 9px 15px;
-      border-radius: 9px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      display: flex; align-items: center; gap: 7px;
+      background: #1e293b; color: #f1f5f9;
+      padding: 9px 15px; border-radius: 9px;
+      font-size: 0.82rem; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       animation: toastIn 0.2s ease-out, toastOut 0.2s ease-in 1.8s forwards;
     }
-
-    .toast::before {
-      font-weight: 700;
-      flex-shrink: 0;
-    }
+    .toast::before { font-weight: 700; flex-shrink: 0; }
     .toast.success::before { content: '✓'; color: #34d399; }
     .toast.error::before   { content: '✕'; color: #f87171; }
     .toast.info::before    { content: 'i'; color: #60a5fa; font-style: italic; }
 
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes toastOut {
-      from { opacity: 1; transform: translateY(0); }
-      to   { opacity: 0; transform: translateY(-6px); }
-    }
+    @keyframes toastIn  { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-6px); } }
 
-    /* Drop overlay */
+    /* ── Drop overlay ── */
     .drop-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(102, 126, 234, 0.05);
-      border: 2px dashed #667eea;
-      border-radius: 4px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.15s ease;
-      z-index: 10;
+      position: absolute; inset: 0;
+      background: rgba(102,126,234,0.05);
+      border: 2px dashed #667eea; border-radius: 4px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.15s ease; z-index: 10;
     }
+    .drop-overlay.active { opacity: 1; pointer-events: auto; }
+    .drop-overlay-icon  { font-size: 30px; line-height: 1; color: #667eea; }
+    .drop-overlay-label { font-size: 0.9rem; font-weight: 600; color: #667eea; }
+    .drop-overlay-sub   { font-size: 0.73rem; color: #94a3b8; }
 
-    .drop-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .drop-overlay-icon {
-      font-size: 30px;
-      line-height: 1;
-      color: #667eea;
-    }
-
-    .drop-overlay-label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #667eea;
-    }
-
-    .drop-overlay-sub {
-      font-size: 0.73rem;
-      color: #94a3b8;
-    }
-
-    /* Upload hint */
+    /* ── Upload hint ── */
     .upload-hint {
-      font-size: 0.72rem;
-      color: #cbd5e1;
-      cursor: pointer;
-      font-family: 'Fira Code', monospace;
-      user-select: none;
+      font-size: 0.72rem; color: #cbd5e1;
+      cursor: pointer; font-family: 'Fira Code', monospace; user-select: none;
     }
-
-    .upload-hint span {
-      color: #667eea;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
+    .upload-hint span { color: #667eea; text-decoration: underline; text-underline-offset: 2px; }
     .upload-hint:hover span { color: #5a70d8; }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
       body { padding: 0; overflow: auto; height: auto; }
-
       .app-header {
         padding: 12px 14px 10px;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background: #f1f5f9;
+        position: sticky; top: 0; z-index: 10; background: #f1f5f9;
       }
-
       .app-brand-text p { display: none; }
       .indent-control label { display: none; }
-
       .container {
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-        border-bottom: none;
-        box-shadow: none;
-        min-height: auto;
+        border-radius: 0; border-left: none; border-right: none; border-bottom: none;
+        box-shadow: none; min-height: auto;
       }
-
       .panels { flex-direction: column; }
       .panel + .panel { border-left: none; border-top: 1px solid #e2e8f0; }
       .panel { min-height: 45vh; }
-
       textarea { font-size: 13px; }
       pre#jsonOutput { font-size: 13px; background: white; }
-
       .btn-ghost .btn-label { display: none; }
     }
   </style>
@@ -576,25 +412,30 @@
             <input type="file" id="fileInput" accept=".json,application/json" style="display:none">
           </div>
           <div class="footer-actions">
-            <button class="btn btn-ghost" id="minifyBtn">
-              <span class="btn-label">壓縮</span>
-            </button>
+            <button class="btn btn-ghost" id="minifyBtn"><span class="btn-label">壓縮</span></button>
             <button class="btn btn-primary" id="formatBtn">
-              格式化
-              <span class="kbd">⌘↵</span>
+              格式化 <span class="kbd">⌘↵</span>
             </button>
           </div>
         </div>
       </div>
-
 
       <!-- Output Panel -->
       <div class="panel">
         <div class="panel-header">
           <span class="panel-label">結果</span>
           <div class="panel-actions">
-            <button class="btn btn-ghost" id="copyBtn" style="padding: 4px 10px; font-size: 0.75rem;">複製</button>
+            <button class="icon-btn" id="searchToggleBtn" title="搜尋 (⌘F)">⌕</button>
+            <button class="icon-btn" id="downloadBtn" title="下載 .json">↓</button>
+            <button class="btn btn-ghost" id="copyBtn" style="padding:4px 10px;font-size:0.75rem;">複製</button>
           </div>
+        </div>
+        <div class="search-bar" id="searchBar">
+          <input type="text" id="searchInput" class="search-input" placeholder="搜尋 key 或 value…">
+          <span id="searchCount" class="search-count"></span>
+          <button class="search-nav" id="prevMatchBtn" title="上一個 (Shift+Enter)" disabled>↑</button>
+          <button class="search-nav" id="nextMatchBtn" title="下一個 (Enter)" disabled>↓</button>
+          <button class="icon-btn" id="closeSearchBtn" title="關閉搜尋 (Esc)">✕</button>
         </div>
         <div class="panel-body">
           <pre id="jsonOutput"></pre>
@@ -611,93 +452,152 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
-    const jsonInput    = document.getElementById('jsonInput');
-    const jsonOutput   = document.getElementById('jsonOutput');
-    const formatBtn    = document.getElementById('formatBtn');
-    const minifyBtn    = document.getElementById('minifyBtn');
-    const clearBtn     = document.getElementById('clearBtn');
-    const copyBtn      = document.getElementById('copyBtn');
-    const scrollTopBtn = document.getElementById('scrollToTop');
-    const inputStatus  = document.getElementById('inputStatus');
-    const inputStats   = document.getElementById('inputStats');
-    const outputStats  = document.getElementById('outputStats');
-    const indentSize   = document.getElementById('indentSize');
-    const toastEl      = document.getElementById('toastContainer');
-    const dropZone     = document.getElementById('dropZone');
-    const dropOverlay  = document.getElementById('dropOverlay');
-    const fileInput    = document.getElementById('fileInput');
-    const uploadHint   = document.getElementById('uploadHint');
+    // ── DOM refs ──
+    const jsonInput       = document.getElementById('jsonInput');
+    const jsonOutput      = document.getElementById('jsonOutput');
+    const formatBtn       = document.getElementById('formatBtn');
+    const minifyBtn       = document.getElementById('minifyBtn');
+    const clearBtn        = document.getElementById('clearBtn');
+    const copyBtn         = document.getElementById('copyBtn');
+    const downloadBtn     = document.getElementById('downloadBtn');
+    const scrollTopBtn    = document.getElementById('scrollToTop');
+    const inputStatus     = document.getElementById('inputStatus');
+    const inputStats      = document.getElementById('inputStats');
+    const outputStats     = document.getElementById('outputStats');
+    const indentSize      = document.getElementById('indentSize');
+    const toastEl         = document.getElementById('toastContainer');
+    const dropZone        = document.getElementById('dropZone');
+    const dropOverlay     = document.getElementById('dropOverlay');
+    const fileInput       = document.getElementById('fileInput');
+    const uploadHint      = document.getElementById('uploadHint');
+    const searchToggleBtn = document.getElementById('searchToggleBtn');
+    const searchBar       = document.getElementById('searchBar');
+    const searchInput     = document.getElementById('searchInput');
+    const searchCount     = document.getElementById('searchCount');
+    const prevMatchBtn    = document.getElementById('prevMatchBtn');
+    const nextMatchBtn    = document.getElementById('nextMatchBtn');
+    const closeSearchBtn  = document.getElementById('closeSearchBtn');
 
+    // ── State ──
+    let lastParsed   = null;
+    let nodeId       = 0;
+    let searchHits   = [];
+    let searchCursor = -1;
+
+    // ── Helpers ──
     function getIndent() {
       const v = indentSize.value;
       return v === 'tab' ? '\t' : parseInt(v);
     }
 
-    function toast(message, type = 'success') {
+    function getIndentStr() {
+      const v = indentSize.value;
+      return v === 'tab' ? '\t' : ' '.repeat(parseInt(v));
+    }
+
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function toast(msg, type = 'success') {
       const el = document.createElement('div');
       el.className = `toast ${type}`;
-      el.textContent = message;
+      el.textContent = msg;
       toastEl.appendChild(el);
       setTimeout(() => el.remove(), 2100);
     }
 
-    function syntaxHighlight(json) {
-      if (typeof json !== 'string') json = JSON.stringify(json, null, getIndent());
-      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return json.replace(
-        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-        match => {
-          let cls = 'number';
-          if (/^"/.test(match)) cls = /:$/.test(match) ? 'key' : 'string';
-          else if (/true|false/.test(match)) cls = 'boolean';
-          else if (/null/.test(match)) cls = 'null';
-          return `<span class="${cls}">${match}</span>`;
+    // ── Tree builder ──
+    function buildTree(value, depth, trailing) {
+      if (value === null)            return `<span class="null">null</span>${trailing}`;
+      if (typeof value === 'boolean') return `<span class="boolean">${value}</span>${trailing}`;
+      if (typeof value === 'number')  return `<span class="number">${value}</span>${trailing}`;
+      if (typeof value === 'string')  return `<span class="string">"${esc(value)}"</span>${trailing}`;
+
+      const isArr  = Array.isArray(value);
+      const keys   = isArr ? null : Object.keys(value);
+      const items  = isArr ? value : keys;
+
+      if (items.length === 0)
+        return `<span class="brace">${isArr ? '[]' : '{}'}</span>${trailing}`;
+
+      const id       = `n${nodeId++}`;
+      const indent   = getIndentStr().repeat(depth + 1);
+      const closeInd = getIndentStr().repeat(depth);
+      const open = isArr ? '[' : '{';
+      const close = isArr ? ']' : '}';
+      const count = items.length;
+      const unit  = isArr ? '項' : '個欄位';
+
+      const children = items.map((item, i) => {
+        const isLast = i === items.length - 1;
+        const comma  = isLast ? '' : ',';
+        if (isArr) {
+          return `\n${indent}${buildTree(value[i], depth + 1, comma)}`;
+        } else {
+          return `\n${indent}<span class="key">"${esc(item)}"</span>: ${buildTree(value[item], depth + 1, comma)}`;
         }
-      );
+      }).join('');
+
+      return `<span class="cnode" id="${id}"><span class="ctoggle" onclick="toggleNode('${id}')">▼</span><span class="brace">${open}</span><span class="cbody">${children}\n${closeInd}</span><span class="csummary"> … <span class="csummary-pill">${count} ${unit}</span> </span><span class="brace">${close}</span></span>${trailing}`;
     }
 
+    function toggleNode(id) {
+      const node   = document.getElementById(id);
+      const toggle = node.querySelector(':scope > .ctoggle');
+      node.classList.toggle('collapsed');
+      toggle.textContent = node.classList.contains('collapsed') ? '▶' : '▼';
+    }
+
+    // ── JSON stats ──
     function getJsonStats(obj) {
       let keys = 0, maxDepth = 0;
       function walk(o, d) {
         maxDepth = Math.max(maxDepth, d);
-        if (Array.isArray(o)) {
-          o.forEach(item => walk(item, d + 1));
-        } else if (o !== null && typeof o === 'object') {
+        if (Array.isArray(o)) o.forEach(v => walk(v, d + 1));
+        else if (o !== null && typeof o === 'object')
           Object.keys(o).forEach(k => { keys++; walk(o[k], d + 1); });
-        }
       }
       walk(obj, 0);
       return { keys, maxDepth };
     }
 
+    // ── Render ──
     function setStatus(type, label) {
       inputStatus.className = `status-badge ${type}`;
       inputStatus.textContent = label;
     }
 
-    function renderOutput(parsed) {
-      jsonOutput.innerHTML = syntaxHighlight(parsed);
-      jsonOutput.scrollTop = 0;
-      const stats = getJsonStats(parsed);
-      const lines = jsonOutput.textContent.split('\n').length;
-      outputStats.textContent = `${stats.keys} 個欄位・深度 ${stats.maxDepth}・${lines} 行`;
-      outputStats.classList.add('active');
+    function showUploadHint(show) {
+      uploadHint.style.display = show ? '' : 'none';
+      inputStats.style.display = show ? 'none' : '';
     }
 
-    function showUploadHint(show) {
-      uploadHint.style.display  = show ? '' : 'none';
-      inputStats.style.display  = show ? 'none' : '';
+    function renderOutput(parsed) {
+      lastParsed = parsed;
+      nodeId = 0;
+      jsonOutput.innerHTML = buildTree(parsed, 0, '');
+      jsonOutput.scrollTop = 0;
+
+      if (searchBar.classList.contains('visible') && searchInput.value.trim())
+        applySearch(searchInput.value);
+
+      const stats   = getJsonStats(parsed);
+      const lines   = JSON.stringify(parsed, null, getIndent()).split('\n').length;
+      outputStats.textContent = `${stats.keys} 個欄位・深度 ${stats.maxDepth}・${lines} 行`;
+      outputStats.classList.add('active');
     }
 
     function updateInput() {
       const text = jsonInput.value.trim();
       if (!text) {
         setStatus('empty', '待輸入');
-        inputStats.textContent = '';
-        inputStats.classList.remove('active');
+        inputStats.textContent = ''; inputStats.classList.remove('active');
         jsonOutput.innerHTML = '';
-        outputStats.textContent = '';
-        outputStats.classList.remove('active');
+        outputStats.textContent = ''; outputStats.classList.remove('active');
+        lastParsed = null;
         showUploadHint(true);
         return;
       }
@@ -710,22 +610,20 @@
         renderOutput(parsed);
       } catch (e) {
         setStatus('invalid', '✕ 格式錯誤');
-        inputStats.textContent = '';
-        inputStats.classList.remove('active');
+        inputStats.textContent = ''; inputStats.classList.remove('active');
         jsonOutput.innerHTML = `<div class="error-msg">${e.message}</div>`;
-        outputStats.textContent = '';
-        outputStats.classList.remove('active');
+        outputStats.textContent = ''; outputStats.classList.remove('active');
+        lastParsed = null;
       }
     }
 
     jsonInput.addEventListener('input', updateInput);
 
     indentSize.addEventListener('change', () => {
-      const text = jsonInput.value.trim();
-      if (!text) return;
-      try { renderOutput(JSON.parse(text)); } catch(e) {}
+      if (lastParsed !== null) renderOutput(lastParsed);
     });
 
+    // ── Format / Minify / Clear ──
     formatBtn.addEventListener('click', () => {
       const text = jsonInput.value.trim();
       if (!text) return;
@@ -734,9 +632,7 @@
         jsonInput.scrollTop = 0;
         updateInput();
         toast('格式化完成');
-      } catch(e) {
-        toast('JSON 格式錯誤，無法格式化', 'error');
-      }
+      } catch(e) { toast('JSON 格式錯誤，無法格式化', 'error'); }
     });
 
     minifyBtn.addEventListener('click', () => {
@@ -746,9 +642,7 @@
         jsonInput.value = JSON.stringify(JSON.parse(text));
         updateInput();
         toast('已壓縮為單行');
-      } catch(e) {
-        toast('JSON 格式錯誤，無法壓縮', 'error');
-      }
+      } catch(e) { toast('JSON 格式錯誤，無法壓縮', 'error'); }
     });
 
     clearBtn.addEventListener('click', () => {
@@ -757,14 +651,147 @@
       jsonInput.focus();
     });
 
+    // ── Copy ──
     copyBtn.addEventListener('click', () => {
-      const text = jsonOutput.textContent;
-      if (!text.trim()) { toast('沒有內容可複製', 'info'); return; }
+      if (!lastParsed) { toast('沒有內容可複製', 'info'); return; }
+      const text = JSON.stringify(lastParsed, null, getIndent());
       navigator.clipboard.writeText(text)
         .then(() => toast('已複製到剪貼簿'))
         .catch(() => toast('複製失敗', 'error'));
     });
 
+    // ── Download ──
+    downloadBtn.addEventListener('click', () => {
+      if (!lastParsed) { toast('沒有內容可下載', 'info'); return; }
+      const text = JSON.stringify(lastParsed, null, getIndent());
+      const blob = new Blob([text], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = Object.assign(document.createElement('a'), { href: url, download: 'formatted.json' });
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('已下載 formatted.json');
+    });
+
+    // ── Search ──
+    function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+    function clearSearchMarks() {
+      jsonOutput.querySelectorAll('mark.sh').forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
+      jsonOutput.normalize();
+      searchHits = []; searchCursor = -1;
+    }
+
+    function applySearch(query) {
+      clearSearchMarks();
+      if (!query) { updateSearchCount(); return; }
+      const re = new RegExp(escapeRegex(query), 'gi');
+      const walker = document.createTreeWalker(jsonOutput, NodeFilter.SHOW_TEXT, {
+        acceptNode: node => {
+          const p = node.parentElement;
+          if (p.classList.contains('ctoggle'))   return NodeFilter.FILTER_REJECT;
+          if (p.classList.contains('csummary'))  return NodeFilter.FILTER_REJECT;
+          if (p.closest('mark.sh'))              return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const textNodes = [];
+      let n;
+      while ((n = walker.nextNode())) textNodes.push(n);
+
+      textNodes.forEach(tn => {
+        const text = tn.textContent;
+        const matches = [...text.matchAll(re)];
+        if (!matches.length) return;
+        const frag = document.createDocumentFragment();
+        let last = 0;
+        matches.forEach(m => {
+          if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          const mark = document.createElement('mark');
+          mark.className = 'sh';
+          mark.textContent = m[0];
+          searchHits.push(mark);
+          frag.appendChild(mark);
+          last = m.index + m[0].length;
+        });
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        tn.replaceWith(frag);
+      });
+
+      if (searchHits.length) { searchCursor = 0; highlightCurrent(); }
+      updateSearchCount();
+    }
+
+    function expandAncestors(el) {
+      let p = el.parentElement;
+      while (p && p !== jsonOutput) {
+        if (p.classList.contains('cnode') && p.classList.contains('collapsed')) {
+          p.classList.remove('collapsed');
+          const t = p.querySelector(':scope > .ctoggle');
+          if (t) t.textContent = '▼';
+        }
+        p = p.parentElement;
+      }
+    }
+
+    function highlightCurrent() {
+      searchHits.forEach((m, i) => m.classList.toggle('current', i === searchCursor));
+      if (searchCursor >= 0 && searchHits[searchCursor]) {
+        expandAncestors(searchHits[searchCursor]);
+        searchHits[searchCursor].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+
+    function navigateSearch(dir) {
+      if (!searchHits.length) return;
+      searchCursor = (searchCursor + dir + searchHits.length) % searchHits.length;
+      highlightCurrent();
+      updateSearchCount();
+    }
+
+    function updateSearchCount() {
+      const hasQuery = searchInput.value.trim();
+      if (!hasQuery) { searchCount.textContent = ''; prevMatchBtn.disabled = nextMatchBtn.disabled = true; return; }
+      if (!searchHits.length) {
+        searchCount.textContent = '無結果'; prevMatchBtn.disabled = nextMatchBtn.disabled = true;
+      } else {
+        searchCount.textContent = `${searchCursor + 1} / ${searchHits.length}`;
+        prevMatchBtn.disabled = nextMatchBtn.disabled = false;
+      }
+    }
+
+    function openSearch() {
+      searchBar.classList.add('visible');
+      searchToggleBtn.classList.add('active');
+      searchInput.focus();
+      searchInput.select();
+    }
+
+    function closeSearch() {
+      searchBar.classList.remove('visible');
+      searchToggleBtn.classList.remove('active');
+      clearSearchMarks();
+      searchInput.value = '';
+      searchCount.textContent = '';
+      prevMatchBtn.disabled = nextMatchBtn.disabled = true;
+    }
+
+    searchToggleBtn.addEventListener('click', () => {
+      searchBar.classList.contains('visible') ? closeSearch() : openSearch();
+    });
+
+    closeSearchBtn.addEventListener('click', closeSearch);
+
+    searchInput.addEventListener('input', () => applySearch(searchInput.value.trim()));
+
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter')  { e.preventDefault(); navigateSearch(e.shiftKey ? -1 : 1); }
+      if (e.key === 'Escape') { e.preventDefault(); closeSearch(); }
+    });
+
+    prevMatchBtn.addEventListener('click', () => navigateSearch(-1));
+    nextMatchBtn.addEventListener('click', () => navigateSearch(1));
+
+    // ── Scroll to top ──
     jsonOutput.addEventListener('scroll', () => {
       scrollTopBtn.classList.toggle('visible', jsonOutput.scrollTop > 80);
     });
@@ -773,60 +800,38 @@
       jsonOutput.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // ── 拖曳上傳 ──
+    // ── Drag & drop ──
     function loadJsonFile(file) {
       if (!file) return;
       if (!file.name.endsWith('.json') && file.type !== 'application/json') {
-        toast('請選擇 .json 格式的檔案', 'error');
-        return;
+        toast('請選擇 .json 格式的檔案', 'error'); return;
       }
       const reader = new FileReader();
-      reader.onload = e => {
-        jsonInput.value = e.target.result;
-        updateInput();
-        toast(`已載入 ${file.name}`);
-      };
+      reader.onload  = e => { jsonInput.value = e.target.result; updateInput(); toast(`已載入 ${file.name}`); };
       reader.onerror = () => toast('檔案讀取失敗', 'error');
       reader.readAsText(file, 'utf-8');
     }
 
-    fileInput.addEventListener('change', e => {
-      if (e.target.files[0]) loadJsonFile(e.target.files[0]);
-      fileInput.value = '';
-    });
+    fileInput.addEventListener('change', e => { if (e.target.files[0]) loadJsonFile(e.target.files[0]); fileInput.value = ''; });
 
     let dragCounter = 0;
-
-    dropZone.addEventListener('dragenter', e => {
-      e.preventDefault();
-      dragCounter++;
-      if (dragCounter === 1) dropOverlay.classList.add('active');
-    });
-
-    dropZone.addEventListener('dragleave', () => {
-      dragCounter--;
-      if (dragCounter === 0) dropOverlay.classList.remove('active');
-    });
-
-    dropZone.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'copy';
-    });
-
+    dropZone.addEventListener('dragenter', e => { e.preventDefault(); if (++dragCounter === 1) dropOverlay.classList.add('active'); });
+    dropZone.addEventListener('dragleave', () => { if (--dragCounter === 0) dropOverlay.classList.remove('active'); });
+    dropZone.addEventListener('dragover',  e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
     dropZone.addEventListener('drop', e => {
-      e.preventDefault();
-      dragCounter = 0;
+      e.preventDefault(); dragCounter = 0;
       dropOverlay.classList.remove('active');
       loadJsonFile(e.dataTransfer.files[0]);
     });
-
-    // 防止瀏覽器直接開啟拖進來的檔案
     document.addEventListener('dragover', e => e.preventDefault());
-    document.addEventListener('drop', e => e.preventDefault());
+    document.addEventListener('drop',     e => e.preventDefault());
 
+    // ── Keyboard shortcuts ──
     document.addEventListener('keydown', e => {
-      const mod = navigator.platform.toUpperCase().includes('MAC') ? e.metaKey : e.ctrlKey;
+      const isMac = navigator.platform.toUpperCase().includes('MAC');
+      const mod   = isMac ? e.metaKey : e.ctrlKey;
       if (mod && e.key === 'Enter') { e.preventDefault(); formatBtn.click(); }
+      if (mod && e.key === 'f')     { e.preventDefault(); openSearch(); }
       if (e.key === 'Escape' && document.activeElement === jsonInput) clearBtn.click();
     });
   </script>
